@@ -5,26 +5,29 @@ def choose_difficulty():
     print("1 - Легкий (неограниченные попытки)")
     print("2 - Средний (15 попыток)")
     print("3 - Сложный (7 попыток)")
+    print("4 - Эксперт (5 попыток)")
     
     while True:
         try:
-            choice = int(input("Ваш выбор (1-3): "))
-            if 1 <= choice <= 3:
+            choice = int(input("Ваш выбор (1-4): "))
+            if 1 <= choice <= 4:
                 return choice
             else:
-                print("Пожалуйста, введите число от 1 до 3")
+                print("Пожалуйста, введите число от 1 до 4")
         except ValueError:
             print("Ошибка! Введите целое число.")
 
+def get_max_attempts(difficulty):
+    attempts_limit = {1: float('inf'), 2: 15, 3: 7, 4: 5}
+    return attempts_limit[difficulty]
+
 # Основная логика игры
+print("=" * 50)
+print("      Добро пожаловать в игру 'Угадай число'!")
+print("=" * 50)
+
 difficulty = choose_difficulty()
-max_attempts = 0
-if difficulty == 1:
-    max_attempts = float('inf')
-elif difficulty == 2:
-    max_attempts = 15
-else:
-    max_attempts = 7
+max_attempts = get_max_attempts(difficulty)
 
 number = random.randint(1, 100)
 attempts = 0
@@ -37,7 +40,7 @@ while attempts < max_attempts:
         attempts += 1
         
         if guess == number:
-            print(f"Поздравляем! Угадали за {attempts} попыток!")
+            print(f"🎉 Поздравляем! Вы угадали число за {attempts} попыток!")
             break
         elif guess < number:
             print("Больше!")
@@ -45,7 +48,10 @@ while attempts < max_attempts:
             print("Меньше!")
             
         if max_attempts != float('inf'):
-            print(f"Осталось попыток: {max_attempts - attempts}")
+            remaining = max_attempts - attempts
+            print(f"Осталось попыток: {remaining}")
+            
+            if remaining == 0:
+                print(f"💔 Увы! Вы исчерпали все попытки. Загаданное число было: {number}")
     except ValueError:
         print("Ошибка! Введите целое число.")
-
